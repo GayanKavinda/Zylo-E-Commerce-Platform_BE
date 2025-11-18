@@ -1,0 +1,512 @@
+{
+  "name": "backend",
+  "path": "c:\\xampp\\htdocs\\New folder\\backend",
+  "type": "directory",
+  "children": [
+    {
+      "name": "app",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "Http",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "Controllers",
+              "type": "folder",
+              "icon": "📁",
+              "children": [
+                {
+                  "name": "Controller.php",
+                  "type": "file",
+                  "icon": "📄"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "Models",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "User.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        },
+        {
+          "name": "Providers",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "AppServiceProvider.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "bootstrap",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "app.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "providers.php",
+          "type": "file",
+          "icon": "📄"
+        }
+      ]
+    },
+    {
+      "name": "config",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "app.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "auth.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "cache.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "database.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "filesystems.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "logging.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "mail.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "permission.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "queue.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "sanctum.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "services.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "session.php",
+          "type": "file",
+          "icon": "📄"
+        }
+      ]
+    },
+    {
+      "name": "database",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "factories",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "UserFactory.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        },
+        {
+          "name": "migrations",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "0001_01_01_000000_create_users_table.php",
+              "type": "file",
+              "icon": "📄"
+            },
+            {
+              "name": "0001_01_01_000001_create_cache_table.php",
+              "type": "file",
+              "icon": "📄"
+            },
+            {
+              "name": "0001_01_01_000002_create_jobs_table.php",
+              "type": "file",
+              "icon": "📄"
+            },
+            {
+              "name": "2025_11_11_085508_create_permission_tables.php",
+              "type": "file",
+              "icon": "📄"
+            },
+            {
+              "name": "2025_11_11_100530_create_personal_access_tokens_table.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        },
+        {
+          "name": "seeders",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "DatabaseSeeder.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        },
+        {
+          "name": ".gitignore",
+          "type": "file",
+          "icon": "📁"
+        },
+        {
+          "name": "database.sqlite",
+          "type": "file",
+          "icon": "📄"
+        }
+      ]
+    },
+    {
+      "name": "public",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": ".htaccess",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "favicon.ico",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "index.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "robots.txt",
+          "type": "file",
+          "icon": "📄"
+        }
+      ]
+    },
+    {
+      "name": "resources",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "css",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "app.css",
+              "type": "file",
+              "icon": "🎨"
+            }
+          ]
+        },
+        {
+          "name": "js",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "app.js",
+              "type": "file",
+              "icon": "📜"
+            },
+            {
+              "name": "bootstrap.js",
+              "type": "file",
+              "icon": "📜"
+            }
+          ]
+        },
+        {
+          "name": "views",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "welcome.blade.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "routes",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "api.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "console.php",
+          "type": "file",
+          "icon": "📄"
+        },
+        {
+          "name": "web.php",
+          "type": "file",
+          "icon": "📄"
+        }
+      ]
+    },
+    {
+      "name": "storage",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "app",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "private",
+              "type": "folder",
+              "icon": "📁",
+              "children": [
+                {
+                  "name": ".gitignore",
+                  "type": "file",
+                  "icon": "📁"
+                }
+              ]
+            },
+            {
+              "name": "public",
+              "type": "folder",
+              "icon": "📁",
+              "children": [
+                {
+                  "name": ".gitignore",
+                  "type": "file",
+                  "icon": "📁"
+                }
+              ]
+            },
+            {
+              "name": ".gitignore",
+              "type": "file",
+              "icon": "📁"
+            }
+          ]
+        },
+        {
+          "name": "framework",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "sessions",
+              "type": "folder",
+              "icon": "📁",
+              "children": [
+                {
+                  "name": ".gitignore",
+                  "type": "file",
+                  "icon": "📁"
+                }
+              ]
+            },
+            {
+              "name": "testing",
+              "type": "folder",
+              "icon": "📁",
+              "children": [
+                {
+                  "name": ".gitignore",
+                  "type": "file",
+                  "icon": "📁"
+                }
+              ]
+            },
+            {
+              "name": "views",
+              "type": "folder",
+              "icon": "📁",
+              "children": [
+                {
+                  "name": ".gitignore",
+                  "type": "file",
+                  "icon": "📁"
+                },
+                {
+                  "name": "9ad623ab6230992da7a633390286e1f9.php",
+                  "type": "file",
+                  "icon": "📄"
+                }
+              ]
+            },
+            {
+              "name": ".gitignore",
+              "type": "file",
+              "icon": "📁"
+            }
+          ]
+        },
+        {
+          "name": "logs",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": ".gitignore",
+              "type": "file",
+              "icon": "📁"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "tests",
+      "type": "folder",
+      "icon": "📁",
+      "children": [
+        {
+          "name": "Feature",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "ExampleTest.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        },
+        {
+          "name": "Unit",
+          "type": "folder",
+          "icon": "📁",
+          "children": [
+            {
+              "name": "ExampleTest.php",
+              "type": "file",
+              "icon": "📄"
+            }
+          ]
+        },
+        {
+          "name": "TestCase.php",
+          "type": "file",
+          "icon": "📄"
+        }
+      ]
+    },
+    {
+      "name": ".editorconfig",
+      "type": "file",
+      "icon": "📄"
+    },
+    {
+      "name": ".env.example",
+      "type": "file",
+      "icon": "📄"
+    },
+    {
+      "name": ".gitattributes",
+      "type": "file",
+      "icon": "📁"
+    },
+    {
+      "name": ".gitignore",
+      "type": "file",
+      "icon": "📁"
+    },
+    {
+      "name": "README.md",
+      "type": "file",
+      "icon": "📝"
+    },
+    {
+      "name": "artisan",
+      "type": "file",
+      "icon": "📄"
+    },
+    {
+      "name": "composer.json",
+      "type": "file",
+      "icon": "⚙️"
+    },
+    {
+      "name": "package.json",
+      "type": "file",
+      "icon": "📦"
+    },
+    {
+      "name": "phpunit.xml",
+      "type": "file",
+      "icon": "📄"
+    },
+    {
+      "name": "vite.config.js",
+      "type": "file",
+      "icon": "📜"
+    }
+  ],
+  "metadata": {
+    "generated": "2025-11-11T10:28:49.866Z",
+    "generator": "FileTree Pro Extension",
+    "version": "0.2.0",
+    "showIcons": true,
+    "maxDepth": 10
+  }
+}
