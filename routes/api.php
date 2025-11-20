@@ -15,7 +15,13 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // 🧍‍♂️ Authenticated User Routes
 Route::middleware('auth:sanctum')->group(function () {
-    Route::get('/user', fn(Request $request) => $request->user());
+    // Route::get('/user', fn(Request $request) => $request->user());
+
+    Route::get('/user', fn(Request $request) => response()->json([
+        'user' => $request->user()
+    ]));
+
+
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
 });
