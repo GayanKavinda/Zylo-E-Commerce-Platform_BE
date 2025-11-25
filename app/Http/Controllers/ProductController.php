@@ -2,51 +2,48 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 
 class ProductController extends Controller
 {
-    public function index() {
-        return response()->json([
-            'message' => 'Product list (Admins Only)',
-            'products' => [
-                ['id' => '1', 'name' => 'Banana', 'price' => 250],
-                ['id' => '2', 'name' => 'Apple', 'price' => 400],
-                ['id' => '3', 'name' => 'Ots', 'price' => 700],
-            ]
-        ]);
+    public function index(): JsonResponse
+    {
+        $products = Product::orderBy('id','desc')->get();
+        return response()->json(['products' => $products]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request): JsonResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'reqired|numeric',
+        $data = $request->validate([
+            'name' => 'required|string',
+            'price' => 'required|numeric',
+            'stock' => 'required|integer',
+            'description' => 'nullable|string',
         ]);
 
-        return response()->json([
-            'message' => 'Product created successfully',
-            'product' => $request->only(['name', 'price']),
-        ]);
+        $product = Product::create($data);
+        return response()->json(['product' => $product], 201);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, $id): JsonResponse
     {
-        $request->validate([
-            'name' => 'string|max:50',
-            'price' => 'numeric'
+        $product = Product::findOrFail($id);
+        $data = $request->validate([
+            'name' => 'sometimes|string',
+            'price' => 'sometimes|numeric',
+            'stock' => 'sometimes|integer',
+            'description' => 'nullable|string',
         ]);
-
-        return response()->json([
-            'message' => "Product $id updated successfully",
-            'updates' => $request->only(['name','price']),
-        ]);
+        $product->update($data);
+        return response()->json(['product' => $product]);
     }
 
-    public function destroy ($id)
+    public function destroy($id): JsonResponse
     {
-        return response()->json([
-            'message' => "Product $id delete successfully"
-        ]);
+        $product = Product::findOrFail($id);
+        $product->delete();
+        return response()->json(['message' => 'Deleted']);
     }
 }

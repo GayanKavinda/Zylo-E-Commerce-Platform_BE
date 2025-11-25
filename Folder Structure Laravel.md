@@ -1,13 +1,19 @@
 # File Tree: backend
 
-**Generated:** 11/11/2025, 4:00:02 PM
+**Generated:** 11/21/2025, 4:49:41 PM
 **Root Path:** `c:\xampp\htdocs\New folder\backend`
 
 ```
 ├── 📁 app
 │   ├── 📁 Http
-│   │   └── 📁 Controllers
-│   │       └── 🐘 Controller.php
+│   │   ├── 📁 Controllers
+│   │   │   ├── 🐘 AuthController.php
+│   │   │   ├── 🐘 Controller.php
+│   │   │   ├── 🐘 CustomerController.php
+│   │   │   ├── 🐘 DashboardController.php
+│   │   │   └── 🐘 ProductController.php
+│   │   └── 📁 Middleware
+│   │       └── 🐘 RoleMiddleware.php
 │   ├── 📁 Models
 │   │   └── 🐘 User.php
 │   └── 📁 Providers
@@ -38,7 +44,11 @@
 │   │   ├── 🐘 2025_11_11_085508_create_permission_tables.php
 │   │   └── 🐘 2025_11_11_100530_create_personal_access_tokens_table.php
 │   ├── 📁 seeders
-│   │   └── 🐘 DatabaseSeeder.php
+│   │   ├── 🐘 AdminSeeder.php
+│   │   ├── 🐘 DatabaseSeeder.php
+│   │   ├── 🐘 PermissionSeeder.php
+│   │   ├── 🐘 RoleSeeder.php
+│   │   └── 🐘 UserSeeder.php
 │   ├── ⚙️ .gitignore
 │   └── 📄 database.sqlite
 ├── 📁 public
@@ -87,9 +97,11 @@
 ├── ⚙️ .gitattributes
 ├── ⚙️ .gitignore
 ├── ⚙️ Folder Structure Laravel.json
+├── 📝 Folder Structure Laravel.md
 ├── 📝 README.md
 ├── 📄 artisan
 ├── ⚙️ composer.json
+├── 📄 laravel
 ├── ⚙️ package.json
 ├── ⚙️ phpunit.xml
 └── 📄 vite.config.js
