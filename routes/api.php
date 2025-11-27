@@ -4,55 +4,58 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
-// use App\Http\Controllers\UserController;
-use App\Http\Controllers\ProductController; // Uncomment when created
+use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CheckoutController;
-use SebastianBergmann\CodeCoverage\Report\Html\Dashboard;
+use App\Http\Controllers\AdminUserController;
 
-// 🔐 Auth Routes
+// 🔐 Public Routes
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
+// Products - Public (for customers to view)
+Route::get('/products', [ProductController::class, 'index']);
+
 // 🧍‍♂️ Authenticated User Routes
 Route::middleware('auth:sanctum')->group(function () {
-    // Route::get('/user', fn(Request $request) => $request->user());
-
     Route::get('/user', fn(Request $request) => response()->json([
-        'user' => $request->user()
+        'user' => $request->user()->load('roles')
     ]));
 
-    Route::post('/create-checkout-session', [CheckoutController::class, 'createSession'])->middleware('auth:sanctum');
-
+    Route::post('/create-checkout-session', [CheckoutController::class, 'createSession']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/dashboard/stats', [DashboardController::class,'stats']);
 });
 
-Route::middleware('auth:sanctum')->get('/dashboard/stats', [DashboardController::class,'stats']);
+// 🔥 Admin & SuperAdmin Routes
+Route::middleware(['auth:sanctum', 'role:superadmin,admin'])->prefix('admin')->group(function () {
+    // User Management
+    Route::get('/users', [AdminUserController::class, 'index']);
+    Route::post('/users', [AdminUserController::class, 'store']);
+    Route::get('/users/{id}', [AdminUserController::class, 'show']);
+    Route::put('/users/{id}', [AdminUserController::class, 'update']);
+    Route::delete('/users/{id}', [AdminUserController::class, 'destroy']);
+    Route::post('/users/{id}/change-role', [AdminUserController::class, 'changeRole']);
+    Route::get('/roles', [AdminUserController::class, 'getRoles']);
+    
+    // Product Management
+    Route::post('/products', [ProductController::class, 'store']);
+    Route::put('/products/{id}', [ProductController::class, 'update']);
+    Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+});
 
-// 🧑‍💼 Admin Routes (Protected by role:admin)
-Route::middleware(['auth:sanctum', 'role:admin'])->group(function () {
-    // Uncomment these once ProductController is created
+// 🛒 Seller Routes
+Route::middleware(['auth:sanctum', 'role:seller'])->prefix('seller')->group(function () {
+    // Sellers can manage their own products
     Route::get('/products', [ProductController::class, 'index']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
 });
 
-// 🧑 Customer Routes (Protected by role:customer)
+// 🧑 Customer Routes
 Route::middleware(['auth:sanctum', 'role:customer'])->group(function () {
-    // Add your customer endpoints here
     Route::get('/profile', [CustomerController::class, 'profile']);
     Route::put('/profile', [CustomerController::class, 'updateProfile']);
-});
-
-// Route::middleware(['auth:sanctum', 'role:admin, customer'])->group(function () {
-//     Route::get ('/dashboard', [DashboardController::class, 'index']);
-// });
-
-Route::middleware(['auth:sanctum', 'role:admin,customer'])->get('/dashboard', function(Request $request) {
-    return response()->json([
-        'message' => 'Welcome to your dashboard',
-        'user' => $request->user()
-    ]);
 });

@@ -9,15 +9,23 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, ...$roles): Response
+    public function handle(Request $request, Closure $next, string $roles): Response
     {
         $user = $request->user();
 
-        // Check if user has any of the allowed Spatie roles
-        if (!$user || !$user->hasAnyRole($roles)) {
-            $roleList = implode(', ', $roles);
-            $message = "Access Denied. Allowed roles: {$roleList}.";
-            return response()->json(['message' => $message], 403);
+        if (!$user) {
+            return response()->json(['message' => 'Unauthenticated'], 401);
+        }
+
+        // Split roles by comma to support multiple roles and trim whitespace
+        $allowedRoles = array_map('trim', explode(',', $roles));
+        
+        // Check if user has any of the allowed roles (using simple role field)
+        if (!in_array($user->role, $allowedRoles)) {
+            return response()->json([
+                'message' => 'Access Denied. Required role: ' . $roles,
+                'your_role' => $user->role
+            ], 403);
         }
 
         return $next($request);
