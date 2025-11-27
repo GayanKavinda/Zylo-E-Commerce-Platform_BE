@@ -8,6 +8,10 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\AdminUserController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\SellerController;
 
 // 🔐 Public Routes
 Route::post('/register', [AuthController::class, 'register']);
@@ -15,6 +19,13 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // Products - Public (for customers to view)
 Route::get('/products', [ProductController::class, 'index']);
+Route::get('/products/featured', [ProductController::class, 'featured']);
+Route::get('/products/categories', [ProductController::class, 'categories']);
+Route::get('/products/{id}', [ProductController::class, 'show']);
+Route::get('/products/{id}/related', [ProductController::class, 'related']);
+
+// Reviews - Public (anyone can view)
+Route::get('/products/{productId}/reviews', [ReviewController::class, 'index']);
 
 // 🧍‍♂️ Authenticated User Routes
 Route::middleware('auth:sanctum')->group(function () {
@@ -22,10 +33,31 @@ Route::middleware('auth:sanctum')->group(function () {
         'user' => $request->user()->load('roles')
     ]));
 
-    Route::post('/create-checkout-session', [CheckoutController::class, 'createSession']);
     Route::post('/logout', [AuthController::class, 'logout']);
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::get('/dashboard/stats', [DashboardController::class,'stats']);
+
+    // Cart Management
+    Route::get('/cart', [CartController::class, 'index']);
+    Route::post('/cart', [CartController::class, 'store']);
+    Route::put('/cart/{id}', [CartController::class, 'update']);
+    Route::delete('/cart/{id}', [CartController::class, 'destroy']);
+    Route::delete('/cart', [CartController::class, 'clear']);
+
+    // Order Management
+    Route::get('/orders', [OrderController::class, 'index']);
+    Route::post('/orders', [OrderController::class, 'store']);
+    Route::get('/orders/{id}', [OrderController::class, 'show']);
+    Route::post('/orders/{id}/cancel', [OrderController::class, 'cancel']);
+
+    // Reviews
+    Route::post('/reviews', [ReviewController::class, 'store']);
+    Route::put('/reviews/{id}', [ReviewController::class, 'update']);
+    Route::delete('/reviews/{id}', [ReviewController::class, 'destroy']);
+    Route::get('/my-reviews', [ReviewController::class, 'userReviews']);
+
+    // Legacy checkout (keeping for compatibility)
+    Route::post('/create-checkout-session', [CheckoutController::class, 'createSession']);
 });
 
 // 🔥 Admin & SuperAdmin Routes
@@ -43,15 +75,30 @@ Route::middleware(['auth:sanctum', 'role:superadmin,admin'])->prefix('admin')->g
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+    // Order Management
+    Route::get('/orders', [OrderController::class, 'adminIndex']);
+    Route::get('/orders/statistics', [OrderController::class, 'statistics']);
+    Route::put('/orders/{id}/status', [OrderController::class, 'updateStatus']);
+    Route::put('/orders/{id}/payment-status', [OrderController::class, 'updatePaymentStatus']);
 });
 
 // 🛒 Seller Routes
 Route::middleware(['auth:sanctum', 'role:seller'])->prefix('seller')->group(function () {
-    // Sellers can manage their own products
-    Route::get('/products', [ProductController::class, 'index']);
+    // Dashboard
+    Route::get('/dashboard', [SellerController::class, 'dashboard']);
+    Route::get('/analytics', [SellerController::class, 'analytics']);
+    Route::get('/inventory-alerts', [SellerController::class, 'inventoryAlerts']);
+
+    // Product Management
+    Route::get('/products', [SellerController::class, 'products']);
     Route::post('/products', [ProductController::class, 'store']);
     Route::put('/products/{id}', [ProductController::class, 'update']);
     Route::delete('/products/{id}', [ProductController::class, 'destroy']);
+
+    // Order Fulfillment
+    Route::get('/orders', [SellerController::class, 'orders']);
+    Route::put('/orders/{id}/fulfillment-status', [SellerController::class, 'updateFulfillmentStatus']);
 });
 
 // 🧑 Customer Routes
