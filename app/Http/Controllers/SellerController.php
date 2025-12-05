@@ -114,22 +114,56 @@ class SellerController extends Controller
      */
     public function orders(Request $request)
     {
-        $query = OrderItem::where('seller_id', $request->user()->id)
-            ->with(['order.user', 'product']);
+        $sellerId = $request->user()->id;
+        
+        // Get unique orders that contain seller's products
+        $query = Order::whereHas('items', function($q) use ($sellerId) {
+                $q->where('seller_id', $sellerId);
+            })
+            ->with(['user', 'items' => function($q) use ($sellerId) {
+                $q->where('seller_id', $sellerId)->with('product');
+            }]);
 
-        // Filter by fulfillment status
-        if ($request->has('fulfillment_status')) {
-            $query->where('fulfillment_status', $request->fulfillment_status);
-        }
-
-        // Filter by order status
-        if ($request->has('order_status')) {
-            $query->whereHas('order', function($q) use ($request) {
-                $q->where('status', $request->order_status);
-            });
+        // Filter by status
+        if ($request->has('status')) {
+            $query->where('status', $request->status);
         }
 
         $orders = $query->orderBy('created_at', 'desc')->paginate(20);
+
+        // Transform the response to include only seller's items
+        $orders->getCollection()->transform(function($order) use ($sellerId) {
+            $sellerItems = $order->items->where('seller_id', $sellerId)->values();
+            $sellerTotal = $sellerItems->sum('subtotal');
+            
+            return [
+                'id' => $order->id,
+                'order_number' => $order->order_number,
+                'customer' => [
+                    'name' => $order->user->name,
+                    'email' => $order->user->email,
+                ],
+                'items' => $sellerItems->map(function($item) {
+                    return [
+                        'id' => $item->id,
+                        'product' => [
+                            'name' => $item->product->name,
+                            'images' => json_decode($item->product->images, true),
+                        ],
+                        'quantity' => $item->quantity,
+                        'price' => $item->price,
+                        'subtotal' => $item->subtotal,
+                        'fulfillment_status' => $item->fulfillment_status,
+                    ];
+                }),
+                'total_amount' => $sellerTotal,
+                'subtotal' => $sellerTotal,
+                'status' => $order->status,
+                'payment_status' => $order->payment_status,
+                'shipping_address' => $order->shipping_address,
+                'created_at' => $order->created_at->toISOString(),
+            ];
+        });
 
         return response()->json($orders);
     }
@@ -140,18 +174,41 @@ class SellerController extends Controller
     public function updateFulfillmentStatus(Request $request, $id)
     {
         $request->validate([
-            'fulfillment_status' => 'required|in:pending,processing,shipped,delivered',
+            'status' => 'required|in:pending,processing,shipped,delivered',
         ]);
 
-        $orderItem = OrderItem::where('id', $id)
-            ->where('seller_id', $request->user()->id)
-            ->firstOrFail();
+        // Get the order
+        $order = Order::whereHas('items', function($q) use ($request) {
+                $q->where('seller_id', $request->user()->id);
+            })
+            ->findOrFail($id);
 
-        $orderItem->update(['fulfillment_status' => $request->fulfillment_status]);
+        // Update all order items belonging to this seller
+        $updatedCount = OrderItem::where('order_id', $order->id)
+            ->where('seller_id', $request->user()->id)
+            ->update(['fulfillment_status' => $request->status]);
+
+        // Check if all items in the order are shipped/delivered
+        $allItemsStatus = OrderItem::where('order_id', $order->id)
+            ->pluck('fulfillment_status')
+            ->unique();
+        
+        // Update main order status based on item statuses
+        if ($allItemsStatus->count() === 1) {
+            if ($allItemsStatus->first() === 'shipped') {
+                $order->update(['status' => 'shipped']);
+            } elseif ($allItemsStatus->first() === 'delivered') {
+                $order->update(['status' => 'delivered']);
+            } elseif ($allItemsStatus->first() === 'processing') {
+                $order->update(['status' => 'processing']);
+            }
+        } elseif ($allItemsStatus->contains('shipped')) {
+            $order->update(['status' => 'processing']);
+        }
 
         return response()->json([
-            'message' => 'Fulfillment status updated successfully',
-            'order_item' => $orderItem->load(['order', 'product']),
+            'message' => 'Order status updated successfully',
+            'updated_items' => $updatedCount,
         ]);
     }
 
